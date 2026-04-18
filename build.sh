@@ -20,7 +20,7 @@ HOME_DIR="$(pwd)"
 
 # Telegram setup
 send_msg() {
-    if (( $NO_TG" )); then
+    if (( NO_TG )); then
         bash "$HOME_DIR/tg_utils.sh" msg "$1"
     fi
 }
