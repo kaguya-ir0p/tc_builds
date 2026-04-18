@@ -31,7 +31,7 @@ send_file() {
 }
 
 GH_USER=kaguya-ir0p
-GH_REPO=Tsukuyomi-Clang
+GH_REPO=tc_builds
 
 # Build LLVM
 echo "building LLVM..."
