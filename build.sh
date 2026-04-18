@@ -3,22 +3,31 @@
 
 # Environment checker
 echo "Checking environment ..."
-for environment in BOT_TOKEN CHAT_ID GITHUB_TOKEN BRANCH; do
+for environment in GITHUB_TOKEN BRANCH; do
     [ -z "${!environment}" ] && {
         echo "$environment is not set, bailing out"
         exit 1
     }
 done
 
+NO_TG=0
+if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ]; then
+    NO_TG=1
+fi
+
 # Get home directory
 HOME_DIR="$(pwd)"
 
 # Telegram setup
 send_msg() {
-    bash "$HOME_DIR/tg_utils.sh" msg "$1"
+    if (( $NO_TG" )); then
+        bash "$HOME_DIR/tg_utils.sh" msg "$1"
+    fi
 }
 send_file() {
-    bash "$HOME_DIR/tg_utils.sh" up "$1" "$2"
+	if (( NO_TG )); then
+        bash "$HOME_DIR/tg_utils.sh" up "$1" "$2"
+    fi
 }
 
 GH_USER=kaguya-ir0p
@@ -39,7 +48,7 @@ send_msg "gh $RUN_NUM: building LLVM"
     --targets AArch64 ARM \
     --lto thin \
     --clang-vendor-string "Tsukuyomi" \
-    --lld-vendor-string "Kassen"
+    --lld-vendor-string "Fushi"
 
 # Check if the final clang binary exists or not
 for file in install/bin/clang-[1-9]*; do
