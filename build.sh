@@ -21,8 +21,8 @@ send_file() {
     bash "$HOME_DIR/tg_utils.sh" up "$1" "$2"
 }
 
-GH_USER=fukiame
-GH_REPO=Geopelia-Clang
+GH_USER=kaguya-ir0p
+GH_REPO=Tsukuyomi-Clang
 
 # Build LLVM
 echo "building LLVM..."
@@ -36,7 +36,7 @@ send_msg "gh $RUN_NUM: building LLVM"
     --quiet-cmake \
     --ref "$BRANCH" \
     --shallow-clone \
-    --targets AArch64 ARM X86 \
+    --targets AArch64 ARM \
     --lto thin \
     --clang-vendor-string "Tsukuyomi" \
     --lld-vendor-string "Kassen"
@@ -57,7 +57,7 @@ echo "building binutils..."
 send_msg "gh $RUN_NUM: building binutils"
 ./build-binutils.py \
     --install-folder "$HOME_DIR/install" \
-    --targets arm aarch64 x86_64
+    --targets arm aarch64
 
 # Remove unused products
 rm -fr install/include
@@ -84,9 +84,9 @@ short_llvm_commit="$(cut -c-8 <<<"$llvm_commit")"
 popd || exit
 llvm_commit_url="https://github.com/llvm/llvm-project/commit/$short_llvm_commit"
 clang_version="$("$HOME_DIR"/install/bin/clang --version | head -n1 | cut -d' ' -f4)"
-build_date="$(TZ=Asia/Ho_Chi_Minh date +"%Y-%m-%d")"
-tags="Geopelia-Clang-$clang_version"
-file="Geopelia-Clang-$clang_version.tar.gz"
+build_date="$(TZ=Asia/Tokyo date +"%Y-%m-%d")"
+tags="Tsukuyomi-Clang-$clang_version"
+file="Tsukuyomi-Clang-$clang_version.tar.gz"
 
 # Get binutils version
 binutils_version=$(grep "LATEST_BINUTILS_RELEASE" build-binutils.py)
