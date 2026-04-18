@@ -40,7 +40,7 @@ jobs:
 
     - name: do the build
       run: |
-        git config --global user.name "fukiame"
-        git config --global user.email "fukiame@proton.me"
+        git config --global user.name "Yachiyo Runami"
+        git config --global user.email "nihoheycy@tuta.io"
         bash build.sh
       continue-on-error: true
