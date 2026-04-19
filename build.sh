@@ -3,12 +3,16 @@
 
 # Environment checker
 echo "Checking environment ..."
-for environment in GITHUB_TOKEN BRANCH; do
+for environment in BRANCH; do
     [ -z "${!environment}" ] && {
         echo "$environment is not set, bailing out"
         exit 1
     }
 done
+NO_GH=0
+if [ -z "$GITHUB_TOKEN" ]; then
+    NO_GH=1
+fi
 
 NO_TG=0
 if [ -z "$BOT_TOKEN" ] || [ -z "$CHAT_ID" ]; then
@@ -20,12 +24,12 @@ HOME_DIR="$(pwd)"
 
 # Telegram setup
 send_msg() {
-    if (( NO_TG )); then
+    if (( ! NO_TG )); then
         bash "$HOME_DIR/tg_utils.sh" msg "$1"
     fi
 }
 send_file() {
-	if (( NO_TG )); then
+	if (( ! NO_TG )); then
         bash "$HOME_DIR/tg_utils.sh" up "$1" "$2"
     fi
 }
@@ -119,7 +123,7 @@ git tag -l | grep "$tags" || overwrite=n
 
 # Upload to github release
 failed=n
-if [ "$overwrite" == "y" ]; then
+if [ "$overwrite" == "y" ] && (( ! NO_GH )) ; then
     ./github-release edit \
         --user "$GH_USER" \
         --repo "$GH_REPO" \
@@ -150,7 +154,7 @@ fi
 
 attempts=0
 # Handle uploader if upload failed
-while [ "$failed" == "y" ] && [ "$attempts" -le "10" ]; do
+while [ "$failed" == "y" ] && [ "$attempts" -le "10" ] && (( ! NO_GH )); do
     failed=n
     echo "upload failed, trying again..."
     ./github-release upload \
