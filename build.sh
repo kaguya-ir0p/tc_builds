@@ -45,7 +45,7 @@ send_msg "gh $RUN_NUM: building LLVM"
     --quiet-cmake \
     --ref "$BRANCH" \
     --shallow-clone \
-    --targets AArch64 ARM \
+    --targets AArch64 ARM X86 \
     --lto thin \
     --clang-vendor-string "Tsukuyomi" \
     --lld-vendor-string "Fushi"
@@ -66,7 +66,7 @@ echo "building binutils..."
 send_msg "gh $RUN_NUM: building binutils"
 ./build-binutils.py \
     --install-folder "$HOME_DIR/install" \
-    --targets arm aarch64
+    --targets arm aarch64 x86_64
 
 # Remove unused products
 rm -fr install/include
